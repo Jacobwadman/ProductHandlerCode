@@ -1,0 +1,9 @@
+{
+  "profiles": {
+    "jw_fapp_producthandler01": {
+      "commandName": "Project",
+      "commandLineArgs": "--port 7167",
+      "launchBrowser": false
+    }
+  }
+}
