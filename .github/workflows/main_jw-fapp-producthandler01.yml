@@ -20,6 +20,9 @@ jobs:
   build-and-test:
     runs-on: windows-latest
 
+    permissions:
+      id-token: write  # Add this line for id-token permissions
+
     steps:
       - name: 'Checkout GitHub Action'
         uses: actions/checkout@v4
@@ -48,6 +51,9 @@ jobs:
     runs-on: windows-latest
     needs: build-and-test
     if: github.ref == 'refs/heads/main'
+
+    permissions:
+      id-token: write  # Add this line for id-token permissions
 
     steps:
       - name: 'Checkout GitHub Action'
