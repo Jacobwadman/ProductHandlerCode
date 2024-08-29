@@ -1,11 +1,11 @@
-using FunctionApp2.Models;
+using jw_fapp_producthandler01.Models;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Azure.Functions.Worker;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
 
-namespace FunctionApp2
+namespace jw_fapp_producthandler01
 {
     public class ProductFunctions
     {
