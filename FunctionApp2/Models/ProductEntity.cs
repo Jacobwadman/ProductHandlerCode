@@ -1,7 +1,7 @@
 ﻿using Azure;
 using Azure.Data.Tables;
 
-namespace FunctionApp2.Models
+namespace jw_fapp_producthandler01.Models
 {
     public class ProductTableEntity : ITableEntity
     {

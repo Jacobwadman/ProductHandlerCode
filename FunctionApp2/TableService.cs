@@ -1,9 +1,9 @@
 ﻿using Azure;
 using Azure.Data.Tables;
-using FunctionApp2.Models;
+using jw_fapp_producthandler01.Models;
 using Microsoft.Extensions.Logging;
 
-namespace FunctionApp2
+namespace jw_fapp_producthandler01
 {
     public class TableService
     {
