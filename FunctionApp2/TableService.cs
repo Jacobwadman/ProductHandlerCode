@@ -1,38 +1,22 @@
-﻿using Azure.Data.Tables;
-using Azure.Identity;
-using jw_fapp_producthandler01.Models;
+﻿using Azure;
+using Azure.Data.Tables;
+using FunctionApp2.Models;
+using Microsoft.Extensions.Logging;
 
-namespace jw_fapp_producthandler01
+namespace FunctionApp2
 {
     public class TableService
     {
         private readonly TableClient _tableClient;
+        private readonly ILogger<TableService> _logger;
 
-
-        //private const string StorageAccountName = "jwtestsacc";
-        //private const string ProductsTableName = "ProductsTable";
-
-        //public TableService(ILoggerFactory loggerFactory)
-        //{
-        //    _logger = loggerFactory.CreateLogger<TableService>();
-
-
-        //    _tableClient = new TableClient(
-        //        new Uri($"https://{StorageAccountName}.table.core.windows.net/"),
-        //        ProductsTableName,
-        //        new DefaultAzureCredential()
-        //    );
-        //}
-        public TableService()
+        public TableService(ILogger<TableService> logger)
         {
-
-
-
             _tableClient = new TableClient(
-                new Uri($"https://{Environment.GetEnvironmentVariable("StorageAccountName")}.table.core.windows.net/"),
-                Environment.GetEnvironmentVariable("ProductsTableName"),
-                new DefaultAzureCredential()
+                Environment.GetEnvironmentVariable("StorageAccountConnectionString"),
+                Environment.GetEnvironmentVariable("ProductsTableName")
             );
+            _logger = logger;
         }
 
         public async Task AddProductAsync(ProductDTO productDto)
@@ -50,14 +34,18 @@ namespace jw_fapp_producthandler01
             {
                 await _tableClient.AddEntityAsync(productEntity);
             }
+            catch (RequestFailedException ex)
+            {
+                _logger.LogError($"Error adding product to table: {ex.Message}");
+                throw new Exception("An error occurred while adding the product. Please try again later.", ex);
+            }
             catch (Exception ex)
             {
-                throw;
+                _logger.LogError($"Unexpected error: {ex.Message}");
+                throw new Exception("An unexpected error occurred. Please try again later.", ex);
             }
         }
 
-
-        //SKippa loopen?
         public async Task<List<ProductDTO>> GetAllProductsAsync()
         {
             var products = new List<ProductDTO>();
@@ -76,9 +64,15 @@ namespace jw_fapp_producthandler01
                     products.Add(productDto);
                 }
             }
+            catch (RequestFailedException ex)
+            {
+                _logger.LogError($"Error retrieving products from table: {ex.Message}");
+                throw new Exception("An error occurred while retrieving the products. Please try again later.", ex);
+            }
             catch (Exception ex)
             {
-                throw;
+                _logger.LogError($"Unexpected error: {ex.Message}");
+                throw new Exception("An unexpected error occurred. Please try again later.", ex);
             }
 
             return products;

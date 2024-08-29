@@ -1,8 +1,8 @@
 {
   "profiles": {
-    "jw_fapp_producthandler01": {
+    "FunctionApp2": {
       "commandName": "Project",
-      "commandLineArgs": "--port 7167",
+      "commandLineArgs": "--port 7040",
       "launchBrowser": false
     }
   }
