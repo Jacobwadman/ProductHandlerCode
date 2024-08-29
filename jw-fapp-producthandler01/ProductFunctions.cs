@@ -1,12 +1,9 @@
 using jw_fapp_producthandler01.Models;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Azure.WebJobs;
-using Microsoft.Azure.WebJobs.Extensions.Http;
+using Microsoft.Azure.Functions.Worker;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
-using System.IO;
-using System.Threading.Tasks;
 
 namespace jw_fapp_producthandler01
 {
@@ -14,13 +11,14 @@ namespace jw_fapp_producthandler01
     {
         private TableService _tableService;
 
-        public ProductFunctions(ILoggerFactory loggerFactory)
+        public ProductFunctions(ILogger<ProductFunctions> logger)
         {
-            _tableService = new TableService(loggerFactory);
+            _tableService = new TableService();
         }
 
-        [FunctionName("AddProduct")]
-        public async Task<IActionResult> AddProduct(
+        //Fixa try catch på båda metoderna
+        [Function("AddProduct")]
+        public async Task<IActionResult> RunAsync(
             [HttpTrigger(AuthorizationLevel.Function, "post", Route = "products")] HttpRequest req)
         {
 
@@ -32,7 +30,7 @@ namespace jw_fapp_producthandler01
             return new OkResult();
         }
 
-        [FunctionName("GetAllProducts")]
+        [Function("GetAllProducts")]
         public async Task<IActionResult> GetAllProducts(
             [HttpTrigger(AuthorizationLevel.Function, "get", Route = "products")] HttpRequest req)
         {
